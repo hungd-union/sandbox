@@ -16,7 +16,9 @@
 
 esp_timer_handle_t oneshot_timer;   // One-shot timer handle
 uint64_t echo_pulse_time = 0;       // Pulse time calculated in echo ISR
+uint64_t new_time = 0;
 uint64_t last_time = 0;
+
 
 // ISR for the trigger pulse
 void IRAM_ATTR oneshot_timer_handler(void* arg)
@@ -31,13 +33,12 @@ void IRAM_ATTR echo_isr_handler(void* arg) {
 
     if (gpio_get_level(INT_PIN)) 
     {
-        int64_t new_time = esp_timer_get_time();
-        echo_pulse_time = new_time - last_time;
-        last_time = new_time;
+        last_time = esp_timer_get_time ();
     }
     if (!gpio_get_level(INT_PIN)) 
     {
-        echo_pulse_time = 0;
+        newtime = esp_timer_get_time();
+        echo_pulse_time = new_time-last_time;
     }
 }
 
